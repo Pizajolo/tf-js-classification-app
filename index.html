@@ -1,18 +1,63 @@
+<!DOCTYPE html>
 <html>
-  <head>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>tf-js-classification-app (Backup 1566934065690)</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Load the latest version of TensorFlow.js -->
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
     <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
-  </head>
-  <body>
-    <div id="console"></div>
-    <!-- Add an video which is the webcam -->
-    <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
-    <button id="class-a">Add A</button>
-    <button id="class-b">Add B</button>
-    <button id="class-c">Add C</button>
-    <!-- Load index.js after the content of the page -->
+</head>
+
+<body style="background-color: #545454;">
+    <section style="background-color: #545454;height: 100vh;width: 100%;color: rgb(67,70,74);">
+        <header style="height: 10vh;background-color: #1e1e1e;">
+            <h1 class="text-center" style="color: rgb(203,206,210);font-size: 26px;padding: 2vh;">Tensorflow.js Classifier</h1>
+            <section class="d-flex d-xl-flex justify-content-center align-items-center justify-content-xl-center" style="width: 100%;height: 45vh;">
+                <!-- Add an video which is the webcam -->
+                <video autoplay playsinline muted id="webcam" style="height: 40vh;" width="560" height="315"></video>
+            </section>
+            <section class="d-flex flex-column align-items-center" style="height: 40vh;width: 100%;">
+                <div class="btn-group btn-group-sm d-xl-flex justify-content-xl-center" role="group">
+                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-a">Class A</button>
+                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-b">Class B</button>
+                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-c">Class C</button></div>
+                <div class="table-responsive text-center" style="padding: 0px;padding-right: 0px;width: 50%;padding-top: 20px;">
+                    <table class="table">
+                        <thead class="text-monospace border-dark">
+                            <tr>
+                                <th style="color: rgb(212,212,213);">Class</th>
+                                <th style="color: rgb(212,212,213);">Prediction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: rgb(212,212,213);font-style: normal;">A</td>
+                                <td style="color: rgb(212,212,213);">
+                                    <div id="console"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="color: rgb(212,212,213);">B</td>
+                                <td style="color: rgb(212,212,213);">0.3</td>
+                            </tr>
+                            <tr>
+                                <td style="color: rgb(212,212,213);">C</td>
+                                <td style="color: rgb(212,212,213);">0.03333</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </header>
+    </section>
     <script src="index.js"></script>
-  </body>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
 </html>
