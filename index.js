@@ -1,6 +1,10 @@
 const classifier = knnClassifier.create();
 const webcamElement = document.getElementById('webcam');
 let net;
+let count_a = 0;
+let count_b = 0;
+let count_c = 0;
+let classes = [];
 
 // Setting up the webcam.
 async function setupWebcam() {
@@ -24,6 +28,7 @@ async function setupWebcam() {
 
 // Create an infinite loop which makes predictions through the webcam element.
 async function app() {
+
   console.log('Loading mobilenet..');
 
   // Load the model.
@@ -38,6 +43,29 @@ async function app() {
     // Get the intermediate activation of MobileNet 'conv_preds' and pass that
     // to the KNN classifier.
     const activation = net.infer(webcamElement, 'conv_preds');
+
+    // Count images fed in and if first image fed in ad class to classes
+    if(classId === 0){
+      if(count_a === 0){
+        classes.push('A')
+      }
+      count_a++;
+      document.getElementById('num-a').innerText = `${count_a}`;
+    }
+    if(classId === 1){
+      if(count_b === 0){
+        classes.push('B')
+      }
+      count_b++;
+      document.getElementById('num-b').innerText = `${count_b}`;
+    }
+    if(classId === 2){
+      if(count_c === 0){
+        classes.push('C')
+      }
+      count_c++;
+      document.getElementById('num-c').innerText = `${count_c}`;
+    }
 
     // Pass the intermediate activation to the classifier.
     classifier.addExample(activation, classId);
@@ -55,13 +83,14 @@ async function app() {
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['A', 'B', 'C'];
-      const length = 4;
 
+      const length = 4;
+      // Print the prediction values to the table
       document.getElementById('out-A').innerText = `${result.confidences[0]}`.substring(0, length);
       document.getElementById('out-B').innerText = `${result.confidences[1]}`.substring(0, length);
       document.getElementById('out-C').innerText = `${result.confidences[2]}`.substring(0, length);
 
+      // Color the background of highest prediction green
       if(classes[result.classIndex] === 'A') {
         document.getElementById("tab-A").style.backgroundColor = "green";
         document.getElementById("tab-B").style.backgroundColor = "transparent";
