@@ -56,10 +56,29 @@ async function app() {
       const result = await classifier.predictClass(activation);
 
       const classes = ['A', 'B', 'C'];
-      document.getElementById('console').innerText = `
-        prediction: ${classes[result.classIndex]}\n
-        probability: ${result.confidences[result.classIndex]}
-      `;
+      const length = 4;
+
+      document.getElementById('out-A').innerText = `${result.confidences[0]}`.substring(0, length);
+      document.getElementById('out-B').innerText = `${result.confidences[1]}`.substring(0, length);
+      document.getElementById('out-C').innerText = `${result.confidences[2]}`.substring(0, length);
+
+      if(classes[result.classIndex] === 'A') {
+        document.getElementById("tab-A").style.backgroundColor = "green";
+        document.getElementById("tab-B").style.backgroundColor = "transparent";
+        document.getElementById("tab-C").style.backgroundColor = "transparent";
+      }
+
+      if(classes[result.classIndex] === 'B') {
+        document.getElementById("tab-A").style.backgroundColor = "transparent";
+        document.getElementById("tab-B").style.backgroundColor = "green";
+        document.getElementById("tab-C").style.backgroundColor = "transparent";
+      }
+
+      if(classes[result.classIndex] === 'C') {
+        document.getElementById("tab-A").style.backgroundColor = "transparent";
+        document.getElementById("tab-B").style.backgroundColor = "transparent";
+        document.getElementById("tab-C").style.backgroundColor = "green";
+      }
     }
 
     await tf.nextFrame();
