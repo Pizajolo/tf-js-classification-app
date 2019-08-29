@@ -5,6 +5,9 @@ let count_a = 0;
 let count_b = 0;
 let count_c = 0;
 let classes = [];
+let context_a = document.getElementById('canvas-a').getContext('2d');
+let context_b = document.getElementById('canvas-b').getContext('2d');
+let context_c = document.getElementById('canvas-c').getContext('2d');
 
 // Setting up the webcam.
 async function setupWebcam() {
@@ -51,6 +54,7 @@ async function app() {
       }
       count_a++;
       document.getElementById('num-a').innerText = `${count_a}`;
+      context_a.drawImage(document.getElementById('webcam'), 0, 0, 50, 32);
     }
     if(classId === 1){
       if(count_b === 0){
@@ -58,6 +62,7 @@ async function app() {
       }
       count_b++;
       document.getElementById('num-b').innerText = `${count_b}`;
+      context_b.drawImage(document.getElementById('webcam'), 0, 0, 50, 32);
     }
     if(classId === 2){
       if(count_c === 0){
@@ -65,11 +70,13 @@ async function app() {
       }
       count_c++;
       document.getElementById('num-c').innerText = `${count_c}`;
+      context_c.drawImage(document.getElementById('webcam'), 0, 0, 50, 32);
     }
 
     // Pass the intermediate activation to the classifier.
     classifier.addExample(activation, classId);
   };
+
 
   // When clicking a button, add an example for that class.
   document.getElementById('class-a').addEventListener('click', () => addExample(0));
