@@ -17,16 +17,22 @@
     <section style="background-color: #545454;height: 100vh;width: 100%;color: rgb(67,70,74);">
         <header style="height: 10vh;background-color: #1e1e1e;">
             <h1 class="text-center" style="color: rgb(203,206,210);font-size: 26px;padding: 2vh;">Tensorflow.js Classifier</h1>
-            <section class="d-flex d-xl-flex justify-content-center align-items-center justify-content-xl-center" style="width: 100%;height: 45vh;">
+            <section class="d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center" style="width: 100%;height: 45vh;">
                 <!-- Add an video which is the webcam -->
                 <video autoplay playsinline muted id="webcam" style="height: 40vh; max-width: 100%" width="560" height="315" ></video>
             </section>
-            <section class="d-flex flex-column justify-content-between align-items-center" style="height: 40vh;width: 100%; min-height: 300px">
+            <div class="d-flex flex-row justify-content-center align-items-center" style="color:rgb(212,212,213); padding-top:20px; width: 100%"><p>Check for custom classifier:</p>
+                <div style="padding-left:10px; padding-bottom: 15px"><input type="checkbox" id="myCheck"></div>
+            </div>
+            <div class="d-flex flex-row justify-content-center align-items-center" style="color:rgb(212,212,213); padding-top:20px; width: 100%">
+                <p id="prediction"></p>
+            </div>
+            <section id="custom" class="d-flex flex-column justify-content-between align-items-center" style="height: 40vh;width: 100%; min-height: 300px">
                 <div class="btn-group btn-group-sm d-xl-flex justify-content-xl-center" role="group">
                     <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-a">Class A</button>
                     <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-b">Class B</button>
                     <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-c">Class C</button></div>
-                <div class="table-responsive text-center" style="padding: 0px; padding-right: 0px; width: 50%;padding-top: 20px; min-width: 300px">
+                <div id="table" class="table-responsive text-center" style="padding: 0px; width: 50%;padding-top: 20px; min-width: 300px">
                     <table class="table">
                         <thead class="text-monospace border-dark">
                             <tr>

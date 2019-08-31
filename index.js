@@ -8,6 +8,7 @@ let classes = [];
 let context_a = document.getElementById('canvas-a').getContext('2d');
 let context_b = document.getElementById('canvas-b').getContext('2d');
 let context_c = document.getElementById('canvas-c').getContext('2d');
+let checked = false;
 
 // Setting up the webcam.
 async function setupWebcam() {
@@ -83,38 +84,67 @@ async function app() {
   document.getElementById('class-b').addEventListener('click', () => addExample(1));
   document.getElementById('class-c').addEventListener('click', () => addExample(2));
 
+  document.getElementById('myCheck').addEventListener('click', () => checked = document.getElementById('myCheck').checked);
+
   while (true) {
     if (classifier.getNumClasses() > 0) {
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(webcamElement, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
-      const result = await classifier.predictClass(activation);
+      if (checked) {
 
+        document.getElementById("custom").style.visibility = "visible";
+        document.getElementById("prediction").style.display = "none";
+        const result = await classifier.predictClass(activation);
+        const length = 4;
+        // Print the prediction values to the table
+        document.getElementById('out-A').innerText = `${result.confidences[0]}`.substring(0, length);
+        document.getElementById('out-B').innerText = `${result.confidences[1]}`.substring(0, length);
+        document.getElementById('out-C').innerText = `${result.confidences[2]}`.substring(0, length);
 
-      const length = 4;
-      // Print the prediction values to the table
-      document.getElementById('out-A').innerText = `${result.confidences[0]}`.substring(0, length);
-      document.getElementById('out-B').innerText = `${result.confidences[1]}`.substring(0, length);
-      document.getElementById('out-C').innerText = `${result.confidences[2]}`.substring(0, length);
+        // Color the background of highest prediction green
+        if (classes[result.classIndex] === 'A') {
+          document.getElementById("tab-A").style.backgroundColor = "green";
+          document.getElementById("tab-B").style.backgroundColor = "transparent";
+          document.getElementById("tab-C").style.backgroundColor = "transparent";
+        }
 
-      // Color the background of highest prediction green
-      if(classes[result.classIndex] === 'A') {
-        document.getElementById("tab-A").style.backgroundColor = "green";
-        document.getElementById("tab-B").style.backgroundColor = "transparent";
-        document.getElementById("tab-C").style.backgroundColor = "transparent";
+        if (classes[result.classIndex] === 'B') {
+          document.getElementById("tab-A").style.backgroundColor = "transparent";
+          document.getElementById("tab-B").style.backgroundColor = "green";
+          document.getElementById("tab-C").style.backgroundColor = "transparent";
+        }
+
+        if (classes[result.classIndex] === 'C') {
+          document.getElementById("tab-A").style.backgroundColor = "transparent";
+          document.getElementById("tab-B").style.backgroundColor = "transparent";
+          document.getElementById("tab-C").style.backgroundColor = "green";
+        }
+      }
+      if (checked === false){
+        document.getElementById("custom").style.visibility = "hidden";
+        document.getElementById("prediction").style.display = "block";
+        const result_b = await net.classify(webcamElement);
+        document.getElementById('prediction').innerText = `
+          prediction: ${result_b[0].className}\n
+          probability: ${result_b[0].probability}
+        `;
       }
 
-      if(classes[result.classIndex] === 'B') {
-        document.getElementById("tab-A").style.backgroundColor = "transparent";
-        document.getElementById("tab-B").style.backgroundColor = "green";
-        document.getElementById("tab-C").style.backgroundColor = "transparent";
-      }
+    }
 
-      if(classes[result.classIndex] === 'C') {
-        document.getElementById("tab-A").style.backgroundColor = "transparent";
-        document.getElementById("tab-B").style.backgroundColor = "transparent";
-        document.getElementById("tab-C").style.backgroundColor = "green";
+    if (checked === false){
+      document.getElementById("custom").style.visibility = "hidden";
+      document.getElementById("prediction").style.display = "block";
+      const result_b = await net.classify(webcamElement);
+      document.getElementById('prediction').innerText = `
+          prediction: ${result_b[0].className}\n
+          probability: ${result_b[0].probability}
+        `;
       }
+    if (checked) {
+      document.getElementById("custom").style.visibility = "visible";
+      document.getElementById("prediction").style.display = "none";
     }
 
     await tf.nextFrame();
