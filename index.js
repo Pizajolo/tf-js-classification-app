@@ -1,15 +1,22 @@
 const classifier = knnClassifier.create();
 const webcamElement = document.getElementById('webcam');
 let net;
+
+// Counters for how many images per class where taken
 let count_a = 0;
 let count_b = 0;
 let count_c = 0;
 let count_d = 0;
+
 let classes = [];
+
+// get canvas to draw images into
 let context_a = document.getElementById('canvas-a').getContext('2d');
 let context_b = document.getElementById('canvas-b').getContext('2d');
 let context_c = document.getElementById('canvas-c').getContext('2d');
 let context_d = document.getElementById('canvas-d').getContext('2d');
+
+// is checkbox checked
 let checked = false;
 
 // Setting up the webcam.
@@ -50,7 +57,7 @@ async function app() {
         // to the KNN classifier.
         const activation = net.infer(webcamElement, 'conv_preds');
 
-        // Count images fed in and if first image fed in ad class to classes
+        // Count images fed in and if first image fed in add class to classes
         if (classId === 0) {
             if (count_a === 0) {
                 classes.push('A')
@@ -95,9 +102,12 @@ async function app() {
     document.getElementById('class-c').addEventListener('click', () => addExample(2));
     document.getElementById('class-d').addEventListener('click', () => addExample(3));
 
+    // Listen to checkbox if clicked, than set checked
     document.getElementById('myCheck').addEventListener('click', () => checked = document.getElementById('myCheck').checked);
 
+    // infinite loop over each webcam frame
     while (true) {
+        // If checkbox not checked print prediction of MobileNet
         if (checked === false) {
             document.getElementById("custom").style.visibility = "hidden";
             document.getElementById("prediction").style.display = "block";
@@ -107,6 +117,7 @@ async function app() {
           probability: ${result_b[0].probability}
        `;
         }
+        // If checkbox checked use custom classifier for prediction
         if (checked) {
             document.getElementById("custom").style.visibility = "visible";
             document.getElementById("prediction").style.display = "none";
