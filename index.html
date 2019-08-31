@@ -6,7 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>tf-js-classification-app</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Load the latest version of TensorFlow.js -->
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
@@ -14,64 +15,118 @@
 </head>
 
 <body style="background-color: #545454;">
-    <section style="background-color: #545454;height: 100vh;width: 100%;color: rgb(67,70,74);">
-        <header style="height: 10vh;background-color: #1e1e1e;">
-            <h1 class="text-center" style="color: rgb(203,206,210);font-size: 26px;padding: 2vh;">Tensorflow.js Classifier</h1>
-            <section class="d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center" style="width: 100%;height: 45vh;">
-                <!-- Add an video which is the webcam -->
-                <video autoplay playsinline muted id="webcam" style="height: 40vh; max-width: 100%" width="560" height="315" ></video>
-            </section>
-            <div class="d-flex flex-row justify-content-center align-items-center" style="color:rgb(212,212,213); padding-top:20px; width: 100%"><p>Check for custom classifier:</p>
-                <div style="padding-left:10px; padding-bottom: 15px"><input type="checkbox" id="myCheck"></div>
+<section style="background-color: #545454;height: 100vh;width: 100%;color: rgb(67,70,74);">
+    <header style="height: 10vh;background-color: #1e1e1e;">
+        <h1 class="text-center" style="color: rgb(203,206,210);font-size: 26px;padding: 2vh;">Tensorflow.js
+            Classifier</h1>
+        <section
+                class="d-flex d-xl-flex flex-column justify-content-center align-items-center justify-content-xl-center"
+                style="width: 100%;height: 45vh;">
+            <!-- Add an video which is the webcam -->
+            <video autoplay playsinline muted id="webcam" style="height: 40vh; max-width: 100%" width="560"
+                   height="315"></video>
+        </section>
+        <div class="d-flex flex-row justify-content-center align-items-center"
+             style="color:rgb(212,212,213); padding-top:20px; width: 100%"><p>Check for custom classifier:</p>
+            <div style="padding-left:10px; padding-bottom: 15px"><input type="checkbox" id="myCheck"></div>
+        </div>
+        <div class="d-flex flex-row justify-content-center align-items-center"
+             style="color:rgb(212,212,213); padding-top:20px; width: 100%">
+            <p id="prediction"></p>
+        </div>
+        <section id="custom" class="d-flex flex-column justify-content-between align-items-center"
+                 style="height: 50vh;width: 100%; min-height: 300px; visibility: hidden">
+            <div class="btn-group btn-group-sm d-xl-flex justify-content-xl-center" role="group">
+                <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-a">
+                    Class A
+                </button>
+                <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-b">
+                    Class B
+                </button>
+                <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-c">
+                    Class C
+                </button>
+                <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-d">
+                    Class D
+                </button>
             </div>
-            <div class="d-flex flex-row justify-content-center align-items-center" style="color:rgb(212,212,213); padding-top:20px; width: 100%">
-                <p id="prediction"></p>
+            <div id="table" class="table-responsive text-center"
+                 style="padding: 0px; width: 50%;padding-top: 20px; min-width: 300px">
+                <table class="table">
+                    <thead class="text-monospace border-dark">
+                    <tr>
+                        <th style="color: rgb(212,212,213);">Class</th>
+                        <th style="color: rgb(212,212,213);">Prediction</th>
+                        <th style="color: rgb(212,212,213);">Input number</th>
+                        <th style="color: rgb(212,212,213);">Last Image</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="tab-A">
+                        <td style="color: rgb(212,212,213);font-style: normal;">A</td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="out-A"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="num-a"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <canvas id="canvas-a" width="50" height="32"></canvas>
+                        </td>
+                    </tr>
+                    <tr id="tab-B">
+                        <td style="color: rgb(212,212,213);">B</td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="out-B"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="num-b"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <canvas id="canvas-b" width="50" height="32"></canvas>
+                        </td>
+                    </tr>
+                    <tr id="tab-C">
+                        <td style="color: rgb(212,212,213);">C</td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="out-C"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="num-c"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <canvas id="canvas-c" width="50" height="32"></canvas>
+                        </td>
+                    </tr>
+                    <tr id="tab-D">
+                        <td style="color: rgb(212,212,213);">D</td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="out-D"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <div id="num-d"></div>
+                        </td>
+                        <td style="color: rgb(212,212,213);">
+                            <canvas id="canvas-d" width="50" height="32"></canvas>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <section id="custom" class="d-flex flex-column justify-content-between align-items-center" style="height: 40vh;width: 100%; min-height: 300px">
-                <div class="btn-group btn-group-sm d-xl-flex justify-content-xl-center" role="group">
-                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-a">Class A</button>
-                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-b">Class B</button>
-                    <button class="btn btn-dark text-center" style="margin: 2px;width: 100px;" type="button" id="class-c">Class C</button></div>
-                <div id="table" class="table-responsive text-center" style="padding: 0px; width: 50%;padding-top: 20px; min-width: 300px">
-                    <table class="table">
-                        <thead class="text-monospace border-dark">
-                            <tr>
-                                <th style="color: rgb(212,212,213);">Class</th>
-                                <th style="color: rgb(212,212,213);">Prediction</th>
-                                <th style="color: rgb(212,212,213);">Input number</th>
-                                <th style="color: rgb(212,212,213);">Last Image</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr id="tab-A">
-                                <td style="color: rgb(212,212,213);font-style: normal;">A</td>
-                                <td style="color: rgb(212,212,213);"><div id="out-A"></div></td>
-                                <td style="color: rgb(212,212,213);"><div id="num-a"></div></td>
-                                <td style="color: rgb(212,212,213);"><canvas  id="canvas-a" width="50" height="32"></canvas></td>
-                            </tr>
-                            <tr id="tab-B">
-                                <td style="color: rgb(212,212,213);">B</td>
-                                <td style="color: rgb(212,212,213);"><div id="out-B"></div></td>
-                                <td style="color: rgb(212,212,213);"><div id="num-b"></div></td>
-                                <td style="color: rgb(212,212,213);"><canvas  id="canvas-b" width="50" height="32"></canvas></td>
-                            </tr>
-                            <tr id="tab-C">
-                                <td style="color: rgb(212,212,213);">C</td>
-                                <td style="color: rgb(212,212,213);"><div id="out-C"></div></td>
-                                <td style="color: rgb(212,212,213);"><div id="num-c"></div></td>
-                                <td style="color: rgb(212,212,213);"><canvas  id="canvas-c" width="50" height="32"></canvas></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+        </section>
 
-        </header>
-    </section>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="index.js"></script>
+    </header>
+</section>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="index.js"></script>
 </body>
 
 </html>
